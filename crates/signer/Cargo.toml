@@ -33,6 +33,7 @@ alloy-dyn-abi = { workspace = true, optional = true, features = [
     "std",
     "eip712",
 ] }
+alloy-rpc-types = { workspace = true, optional = true }
 
 [dev-dependencies]
 alloy-consensus = { workspace = true, features = ["std"] }

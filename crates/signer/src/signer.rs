@@ -1,5 +1,5 @@
 use crate::Result;
-use alloy_primitives::{eip191_hash_message, Address, ChainId, Signature, B256};
+use alloy_primitives::{eip191_hash_message, Address, ChainId, Signature, B256, U256};
 use async_trait::async_trait;
 use auto_impl::auto_impl;
 
@@ -26,7 +26,15 @@ pub trait Signer<Sig = Signature> {
     async fn sign_hash(&self, hash: &B256) -> Result<Sig>;
 
     /// Signs EIP-7702 auth.
-    async fn sign_auth(&self, nonce: u64, chain_id: u64, address: Address) -> Result<Sig>;
+    #[inline]
+    async fn sign_auth(&self, nonce: u64, chain_id: u64, address: Address) -> Result<Sig> {
+        self
+            .sign_hash(
+                &Authorization { chain_id: U256::from(chain_id), address, nonce }
+                    .signature_hash(),
+            )
+            .await
+    }
 
     /// Signs the hash of the provided message after prefixing it, as specified in [EIP-191].
     ///
