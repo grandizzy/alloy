@@ -25,6 +25,9 @@ pub trait Signer<Sig = Signature> {
     /// Signs the given hash.
     async fn sign_hash(&self, hash: &B256) -> Result<Sig>;
 
+    /// Signs EIP-7702 auth.
+    async fn sign_auth(&self, nonce: u64, chain_id: u64, address: Address) -> Result<Sig>;
+
     /// Signs the hash of the provided message after prefixing it, as specified in [EIP-191].
     ///
     /// [EIP-191]: https://eips.ethereum.org/EIPS/eip-191
